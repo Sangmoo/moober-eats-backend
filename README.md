@@ -7,7 +7,6 @@ The Backend of Moober Eats
 - id
 - createAt
 - updateAt
-
 - email
 - password
 - role(client|owner|delivery)
