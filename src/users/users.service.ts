@@ -52,7 +52,7 @@ export class UsersService {
         };
       }
       // make a JWT Token to the user
-      const token = jwt.sign({ id: user.id }, this.config.get('SECRET_KEY'));
+      const token = jwt.sign({ id: user.id }, this.config.get('PRIVATE_KEY'));
       return {
         ok: true,
         token,
