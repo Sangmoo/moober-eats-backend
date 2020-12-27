@@ -12,7 +12,6 @@ import { JwtService } from 'src/jwt/jwt.service';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
-    private readonly config: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -52,7 +51,7 @@ export class UsersService {
         };
       }
       // make a JWT Token to the user
-      const token = jwt.sign({ id: user.id }, this.config.get('PRIVATE_KEY'));
+      const token = this.jwtService.sign(user.id);
       return {
         ok: true,
         token,
