@@ -52,4 +52,9 @@ export class UsersResolver {
       };
     }
   }
+
+  @Query(returns => User)
+  me() {
+    // Middleware - Http Headers , find User
+  }
 }
