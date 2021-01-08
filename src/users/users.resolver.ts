@@ -3,6 +3,10 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthUser } from 'src/auth/auth-user.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import {
+  EditProfileInput,
+  EditProfileOutput,
+} from 'src/restaurants/dtos/edit-profile.dto';
+import {
   UserProfileInput,
   UserProfileOutput,
 } from 'src/restaurants/dtos/user-profile.dto';
@@ -80,6 +84,22 @@ export class UsersResolver {
       return {
         error: 'User Not Found',
         ok: false,
+      };
+    }
+  }
+
+  @UseGuards(AuthGuard)
+  @Mutation(returns => EditProfileOutput)
+  async editProfile(
+    @AuthUser() authUser: User,
+    @Args('input') editProfileInput: EditProfileInput,
+  ): Promise<EditProfileOutput> {
+    try {
+      await this.userService.editProfile(authUser.id, editProfileInput);
+    } catch (error) {
+      return {
+        ok: false,
+        error,
       };
     }
   }
