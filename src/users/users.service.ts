@@ -70,7 +70,21 @@ export class UserService {
     return this.users.findOne({ id });
   }
 
-  async editProfile(userID: number, { email, password }: EditProfileInput) {
-    return this.users.update(userID, { email, password });
+  // Update User
+  async editProfile(
+    userID: number,
+    { email, password }: EditProfileInput,
+  ): Promise<User> {
+    const user = await this.users.findOne(userID);
+    if (email) {
+      user.email = email;
+    }
+    if (password) {
+      user.password = password;
+    }
+
+    return this.users.save(user);
   }
+
+  // Delete User
 }
