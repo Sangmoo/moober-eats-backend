@@ -7,7 +7,7 @@ import { User } from './entities/user.entity';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from 'src/jwt/jwt.service';
-import { EditProfileInput } from 'src/restaurants/dtos/edit-profile.dto';
+import { EditProfileInput } from 'src/users/dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
 
 @Injectable()
@@ -96,6 +96,19 @@ export class UserService {
     }
 
     return this.users.save(user);
+  }
+
+  async verifyEmail(code: string): Promise<boolean> {
+    const verification = await this.verifications.findOne(
+      { code },
+      // { loadRelationIds: true },
+      { relations: ['user'] },
+    );
+    if (verification) {
+      verification.user.verified = true;
+      this.users.save(verification.user);
+    }
+    return false;
   }
 
   // Delete User
