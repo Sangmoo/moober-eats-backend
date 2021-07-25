@@ -7,11 +7,11 @@ import { User } from './entities/user.entity';
 import { Verification } from './entities/verification.entity';
 import { UserService } from './users.service';
 
-const MockRepository = {
+const MockRepository = () => ({
   fineOne: jest.fn(),
   save: jest.fn(),
   create: jest.fn(),
-};
+});
 
 const mockJwtService = {
   sign: jest.fn(),
@@ -30,6 +30,7 @@ type MockRepository<T = any> = Partial<
 describe('UserService', () => {
   let service: UserService;
   let usersRepository: MockRepository<User>;
+  let verificationsRepository: MockRepository<Verification>;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -37,11 +38,11 @@ describe('UserService', () => {
         UserService,
         {
           provide: getRepositoryToken(User),
-          useValue: MockRepository,
+          useValue: MockRepository(),
         },
         {
           provide: getRepositoryToken(Verification),
-          useValue: MockRepository,
+          useValue: MockRepository(),
         },
         {
           provide: JwtService,
@@ -62,25 +63,35 @@ describe('UserService', () => {
   //     expect(service).toBeDefined();
   //   });
 
-  describe('createAccount', () => {
-    // it('should fail if user exists', async () => {
-    // usersRepository.findOne.mockResolvedValue({
-    //   id: 1,
-    //   email: 'Hello',
-    // });
-    // const result = await service.createAccount({
-    //   email: '',
-    //   password: '',
-    //   role: 0,
-    // });
-    // expect(result).toMatchObject({
-    //   ok: false,
-    //   error: 'There is a user with that email already',
-    // });
-    // });
-  });
-  it.todo('login');
-  it.todo('findById');
-  it.todo('editProfile');
-  it.todo('verifyEmail');
-});
+//   describe('createAccount', () => {
+//     const createAccountArgs = {
+//       email: '',
+//       password: '',
+//       role: 0,
+//     };
+//     it('should fail if user exists', async () => {
+//       usersRepository.findOne.mockResolvedValue({
+//         id: 1,
+//         email: '',
+//       });
+//       const result = await service.createAccount(createAccountArgs);
+//       expect(result).toMatchObject({
+//         ok: false,
+//         error: 'There is a user with that email already',
+//       });
+//     });
+//     it('should create a new user', async () => {
+//       usersRepository.findOne.mockResolvedValue(undefined);
+//       usersRepository.create.mockReturnValue(createAccountArgs);
+//       await service.createAccount(createAccountArgs);
+//       expect(usersRepository.create).toHaveBeenCalledTimes(1);
+//       expect(usersRepository.create).toHaveBeenCalledWith(createAccountArgs);
+//       expect(usersRepository.save).toHaveBeenCalledTimes(1);
+//       expect(usersRepository.save).toHaveBeenCalled();
+//     });
+//   });
+//   it.todo('login');
+//   it.todo('findById');
+//   it.todo('editProfile');
+//   it.todo('verifyEmail');
+// });
